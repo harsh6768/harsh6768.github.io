@@ -189,7 +189,7 @@ main { position: relative; z-index: 2; }
   transition: background .2s, transform .2s;
 }
 .chip:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-.stack-head { margin-top: 1.6rem; }
+.skills-head { margin-top: 1.8rem; }
 
 /* Contact */
 .contact { position: relative; }
