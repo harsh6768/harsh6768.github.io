@@ -140,3 +140,10 @@ footer { text-align: center; padding: 3rem; color: var(--muted); font-size: 0.85
 
 .card .foot a.live { position: relative; z-index: 2; color: var(--accent); }
 .card .foot a.live:hover { text-decoration: underline; }
+
+.timeline .points { margin-top: 0.6rem; padding-left: 1.1rem; color: var(--muted); font-size: 0.95rem; }
+.timeline .points li { margin-bottom: 0.4rem; }
+.timeline .points li::before { display: none; }
+.timeline .points li { position: static; margin-bottom: 0.4rem; list-style: disc; }
+.timeline .skills-line { color: var(--accent); font-size: 0.85rem; margin-top: 0.5rem; }
+.sub-title { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--accent-2); margin: 3rem 0 2rem; }

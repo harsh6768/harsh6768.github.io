@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { profile, experience, projects, skills } from './data.js';
+import { profile, experience, education, projects, skills } from './data.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -12,7 +12,16 @@ document.getElementById('timeline').innerHTML = experience.map((e) => `
   <li class="reveal">
     <h3>${e.role} · ${e.company}</h3>
     <div class="meta">${e.period}</div>
-    <p>${e.detail}</p>
+    ${e.points.length ? `<ul class="points">${e.points.map((p) => `<li>${p}</li>`).join('')}</ul>` : ''}
+    ${e.skills ? `<p class="skills-line">${e.skills}</p>` : ''}
+  </li>`).join('');
+
+document.getElementById('education').innerHTML = education.map((e) => `
+  <li class="reveal">
+    <h3>${e.school}</h3>
+    <div class="meta">${e.period}</div>
+    <p>${e.degree}</p>
+    ${e.detail ? `<p class="skills-line">${e.detail}</p>` : ''}
   </li>`).join('');
 
 document.getElementById('cards').innerHTML = projects.map((p) => `
