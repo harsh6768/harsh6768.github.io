@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Harsh Chaurasiya — Software Engineer. Backend, payments and DevOps." />
+    <title>Harsh Chaurasiya — Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <canvas id="scene" aria-hidden="true"></canvas>
+
+    <header class="bar glass-pill">
+      <a href="#top" class="logo">HC</a>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#career">Career</a>
+        <a href="#builds">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="top" class="hero">
+        <div class="glass hero-card">
+          <p class="eyebrow">Software Engineer · Bangalore</p>
+          <h1>Harsh Chaurasiya</h1>
+          <p class="line" id="role">Backend Developer</p>
+          <p class="lede">Payment systems, backend services and the cloud infrastructure behind them.</p>
+          <div class="actions">
+            <a href="#builds" class="btn solid">View projects</a>
+            <a href="#contact" class="btn">Contact</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="block">
+        <div class="glass">
+          <p class="eyebrow">About</p>
+          <p class="lede big" id="about-text"></p>
+          <div class="chips" id="chips"></div>
+        </div>
+      </section>
+
+      <section id="career" class="block right">
+        <div class="glass">
+          <p class="eyebrow">Career</p>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </section>
+
+      <section id="education" class="block">
+        <div class="glass">
+          <p class="eyebrow">Education</p>
+          <ol class="timeline" id="education-list"></ol>
+        </div>
+      </section>
+
+      <section id="builds" class="block right">
+        <div class="glass wide">
+          <p class="eyebrow">Projects</p>
+          <div class="cards" id="cards"></div>
+        </div>
+      </section>
+
+      <section id="contact" class="block center">
+        <div class="glass">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's build something fluid.</h2>
+          <div class="actions">
+            <a class="btn solid" href="https://github.com/harsh6768" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn" id="linkedin" href="#" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <p class="foot">© <span id="year"></span> Harsh Chaurasiya</p>
+      </section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

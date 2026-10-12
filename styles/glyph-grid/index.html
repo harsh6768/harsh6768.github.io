@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Harsh Chaurasiya — Software Engineer. Backend, payments and DevOps." />
+    <title>Harsh Chaurasiya — Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="spot" id="spot" aria-hidden="true"></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="orb-label" id="orb-label" aria-hidden="true"></div>
+
+    <header class="top">
+      <a href="#top" class="logo">HC◢</a>
+      <nav>
+        <a href="#about" data-nav="about">ABOUT</a>
+        <a href="#career" data-nav="career">CAREER</a>
+        <a href="#builds" data-nav="builds">BUILDS</a>
+        <a href="#contact" data-nav="contact">CONTACT</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="top" class="cell hero">
+        <p class="mono small">◆ SOFTWARE ENGINEER — BANGALORE</p>
+        <h1>Harsh<br />Chaurasiya</h1>
+        <p class="line"><span id="role">Backend Developer</span><span class="caret">_</span></p>
+        <p class="lede">Payment systems, backend services and the cloud infrastructure behind them.</p>
+        <div class="actions">
+          <a href="#builds" class="btn solid magnetic">View builds →</a>
+          <a href="#contact" class="btn magnetic">Contact</a>
+        </div>
+      </section>
+
+      <section id="about" class="cell">
+        <p class="mono small">01 ◯ ABOUT</p>
+        <p class="lede big" id="about-text"></p>
+        <p class="mono small spaced">02 ▲ STACK</p>
+        <div class="chips" id="chips"></div>
+      </section>
+
+      <section id="career" class="cell">
+        <p class="mono small">03 ■ CAREER</p>
+        <ol class="timeline" id="timeline"></ol>
+      </section>
+
+      <section id="education" class="cell">
+        <p class="mono small">04 ✚ EDUCATION</p>
+        <ol class="timeline" id="education-list"></ol>
+      </section>
+
+      <section id="builds" class="cell wide">
+        <p class="mono small">05 ◆ BUILDS</p>
+        <div class="cards" id="cards"></div>
+      </section>
+
+      <section id="contact" class="cell">
+        <p class="mono small">06 ● CONTACT</p>
+        <h2>Let's make<br />a pattern.</h2>
+        <div class="actions">
+          <a class="btn solid" href="https://github.com/harsh6768" target="_blank" rel="noopener">GitHub →</a>
+          <a class="btn" id="linkedin" href="#" target="_blank" rel="noopener">LinkedIn →</a>
+        </div>
+      </section>
+
+      <footer class="foot mono">© <span id="year"></span> Harsh Chaurasiya</footer>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
