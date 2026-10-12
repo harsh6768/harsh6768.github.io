@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Harsh Chaurasiya — Backend Developer & DevOps Engineer." />
+    <title>Harsh Chaurasiya — Backend & DevOps</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <canvas id="bg" aria-hidden="true"></canvas>
+
+    <header class="nav">
+      <a href="#top" class="logo">HC<span>.</span></a>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="top" class="hero">
+        <p class="eyebrow reveal">Hello, world. I'm</p>
+        <h1 class="glitch reveal" data-text="Harsh Chaurasiya">Harsh Chaurasiya</h1>
+        <p class="role reveal">Backend Developer <span>//</span> DevOps Engineer</p>
+        <p class="tagline reveal">Building scalable APIs, payment systems and cloud infrastructure.</p>
+        <div class="cta reveal">
+          <a href="#projects" class="btn primary">View projects</a>
+          <a href="#contact" class="btn">Get in touch</a>
+        </div>
+        <div class="scroll-hint" aria-hidden="true"><span></span></div>
+      </section>
+
+      <section id="about" class="section">
+        <h2 class="title reveal">01. About</h2>
+        <div class="about-grid">
+          <p class="reveal" id="about-text"></p>
+          <ul class="stats reveal">
+            <li><strong data-count="129">0</strong><span>Public repos</span></li>
+            <li><strong data-count="54">0</strong><span>GitHub followers</span></li>
+            <li><strong data-count="59">0</strong><span>Total stars across repos</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="experience" class="section">
+        <h2 class="title reveal">02. Experience</h2>
+        <ol class="timeline" id="timeline"></ol>
+      </section>
+
+      <section id="projects" class="section">
+        <h2 class="title reveal">03. Projects</h2>
+        <div class="cards" id="cards"></div>
+      </section>
+
+      <section id="skills" class="section">
+        <h2 class="title reveal">04. Stack</h2>
+        <div class="chips reveal" id="chips"></div>
+      </section>
+
+      <section id="contact" class="section contact">
+        <h2 class="title reveal">05. Contact</h2>
+        <p class="reveal">Open to backend, DevOps and platform roles. Let's build something.</p>
+        <div class="cta reveal">
+          <a class="btn primary" href="https://github.com/harsh6768" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" id="linkedin" href="#" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>© <span id="year"></span> Harsh Chaurasiya</footer>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
