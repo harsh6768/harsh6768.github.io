@@ -3,7 +3,7 @@ export const profile = {
   name: 'Harsh Chaurasiya',
   location: 'Bangalore, India',
   github: 'https://github.com/harsh6768',
-  linkedin: 'https://www.linkedin.com/in/REPLACE_ME/',
+  linkedin: 'https://www.linkedin.com/in/harsh6768/',
   about:
     'Backend developer and DevOps engineer based in Bangalore, currently at PhonePe. I build REST and event-driven APIs, payment and ride-booking flows, and the infrastructure that ships them: AWS, Docker, CI/CD and Kubernetes.',
 };
