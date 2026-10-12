@@ -90,99 +90,52 @@ const canvas = document.getElementById('scene');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x0b0a1f, 0.045);
+scene.fog = new THREE.FogExp2(0xe6e1ff, 0.02);
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 
-const HOT = new THREE.Color(0xa78bfa);   // violet
-const CYAN = new THREE.Color(0x5eead4);  // teal
-const LIME = new THREE.Color(0xfda4af);  // rose
+// Soft studio light for clay: a sky/ground hemisphere plus a warm key light
+scene.add(new THREE.HemisphereLight(0xffffff, 0xf2c6d0, 1.6));
+const key = new THREE.DirectionalLight(0xffffff, 1.4);
+key.position.set(5, 8, 6);
+scene.add(key);
+const fill = new THREE.PointLight(0xffd3b6, 6, 40);
+fill.position.set(-6, -2, 4);
+scene.add(fill);
 
-// Core: Fibonacci sphere of points + wireframe shell
-const core = new THREE.Group();
-const CORE_N = 900;
-const corePos = new Float32Array(CORE_N * 3);
-for (let i = 0; i < CORE_N; i++) {
-  const y = 1 - (i / (CORE_N - 1)) * 2;
-  const rad = Math.sqrt(1 - y * y);
-  const th = i * Math.PI * (3 - Math.sqrt(5));
-  corePos.set([Math.cos(th) * rad * 2.2, y * 2.2, Math.sin(th) * rad * 2.2], i * 3);
-}
-const coreGeo = new THREE.BufferGeometry();
-coreGeo.setAttribute('position', new THREE.BufferAttribute(corePos, 3));
-core.add(new THREE.Points(coreGeo, new THREE.PointsMaterial({ color: CYAN, size: 0.05, transparent: true, opacity: 0.9 })));
-core.add(new THREE.Mesh(
-  new THREE.IcosahedronGeometry(1.5, 2),
-  new THREE.MeshBasicMaterial({ color: HOT, wireframe: true, transparent: true, opacity: 0.25 })
-));
-scene.add(core);
+const CLAY = [0xff9eb5, 0xffc38b, 0x9ee6c9, 0xa9b8ff, 0xffe27a, 0xd9b8ff];
 
-// Orbit rings around the core
-const rings = [];
-[2.9, 3.6, 4.4].forEach((radius, i) => {
-  const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(radius, 0.008, 6, 200),
-    new THREE.MeshBasicMaterial({ color: i === 1 ? LIME : CYAN, transparent: true, opacity: 0.45 })
-  );
-  ring.rotation.set(Math.PI / 2.3 + i * 0.35, i * 0.6, 0);
-  scene.add(ring);
-  rings.push(ring);
-});
-
-// Project orbs on a wide ring; hover shows label, click opens repo
-const orbs = [];
-const orbGroup = new THREE.Group();
-scene.add(orbGroup);
+// Project blobs: squishy clay spheres in a ring. Hover shows label, click opens repo.
+const blobs = [];
+const blobGroup = new THREE.Group();
+blobGroup.position.set(5, 0, 0); // sit the ring to the right so the text stays clear
+scene.add(blobGroup);
 projects.forEach((p, i) => {
   const a = (i / projects.length) * Math.PI * 2;
-  const pos = new THREE.Vector3(Math.cos(a) * 8, Math.sin(a * 2) * 1.2, Math.sin(a) * 8);
-  const orb = new THREE.Mesh(
-    new THREE.SphereGeometry(0.45, 32, 32),
-    new THREE.MeshBasicMaterial({ color: i % 2 ? HOT : CYAN, transparent: true, opacity: 0.9 })
-  );
-  orb.position.copy(pos);
-  orb.userData = { name: p.name, url: p.url, base: pos.clone() };
-  const halo = new THREE.Mesh(
-    new THREE.RingGeometry(0.6, 0.66, 48),
-    new THREE.MeshBasicMaterial({ color: CYAN, side: THREE.DoubleSide, transparent: true, opacity: 0.5 })
-  );
-  halo.position.copy(pos);
-  orbGroup.add(orb, halo);
-  orbs.push({ mesh: orb, halo });
+  const base = new THREE.Vector3(Math.cos(a) * 5.5, 0.5 * Math.sin(a * 2), Math.sin(a) * 5.5);
+  const geo = new THREE.IcosahedronGeometry(0.6, 5);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: CLAY[i % CLAY.length], roughness: 0.55, metalness: 0 }));
+  mesh.position.copy(base);
+  mesh.userData = {
+    name: p.name, url: p.url, base: base.clone(), phase: i,
+    dirs: Float32Array.from(geo.attributes.position.array),
+    pos: geo.attributes.position,
+  };
+  blobGroup.add(mesh);
+  blobs.push(mesh);
 });
 
-// Experience spine: a helix of nodes on the right
-const spine = new THREE.Group();
-experience.forEach((_, i) => {
-  const t = i / Math.max(experience.length - 1, 1);
-  const node = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.22),
-    new THREE.MeshBasicMaterial({ color: LIME, wireframe: true })
-  );
-  node.position.set(Math.cos(t * 6) * 1.3 + 9, 4 - t * 8, Math.sin(t * 6) * 1.3 - 6);
-  spine.add(node);
-});
-scene.add(spine);
-
-// Starfield + floor grid for depth
-const starCount = 1600;
-const starPos = new Float32Array(starCount * 3);
-for (let i = 0; i < starCount; i++) {
-  starPos.set([(Math.random() - 0.5) * 120, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 120], i * 3);
-}
-const starGeo = new THREE.BufferGeometry();
-starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, transparent: true, opacity: 0.6 })));
-
-const grid = new THREE.GridHelper(120, 60, 0x5eead4, 0x1e1b4b);
-grid.position.y = -5;
-grid.material.transparent = true;
-grid.material.opacity = 0.35;
-scene.add(grid);
+// Soft clay bean behind the hero text for depth (decorative, not clickable)
+const bean = new THREE.Mesh(
+  new THREE.TorusKnotGeometry(1.1, 0.42, 160, 24),
+  new THREE.MeshStandardMaterial({ color: 0xc7d2fe, roughness: 0.6 })
+);
+bean.position.set(9, 2, -6);
+scene.add(bean);
 
 /* ---------- Camera path driven by scroll ---------- */
 // One keypoint per chapter: camera position + look-at target
 const path = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-3.2, 0.6, 10), // 00 hero (core sits right of the text)
+  new THREE.Vector3(-2, 1, 21),     // 00 hero (blobs sit behind the text)
   new THREE.Vector3(-5, 1.2, 6),    // 01 about
   new THREE.Vector3(3, -0.6, 16),   // 02 career (highlighted, outside the orb ring)
   new THREE.Vector3(0, 3.2, 12),    // 03 builds
@@ -223,7 +176,7 @@ function updateHud(idx, t) {
   hudBar.style.height = `${Math.min(Math.max(t, 0), 1) * 100}%`;
 }
 
-/* ---------- Orb hover + click ---------- */
+/* ---------- Blob hover + click ---------- */
 const label = document.getElementById('orb-label');
 const ray = new THREE.Raycaster();
 const pointer = new THREE.Vector2(9, 9);
@@ -235,11 +188,11 @@ if (finePointer) {
     label.style.top = e.clientY + 'px';
   });
 }
-// Clicks on empty space reach the scene; check which orb (if any) is under the cursor
+// Clicks on empty space reach the scene; check which blob (if any) is under the cursor
 window.addEventListener('click', (e) => {
   if (e.target.closest('a, button, .glass, .card')) return;
   ray.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
-  const hit = ray.intersectObjects(orbs.map((o) => o.mesh), false)[0];
+  const hit = ray.intersectObjects(blobs, false)[0];
   if (hit) window.open(hit.object.userData.url, '_blank', 'noopener');
 });
 
@@ -268,7 +221,7 @@ function frame() {
   updateHud(idx, progress);
 
   if (reduceMotion) {
-    camera.position.set(-3.2, 0.6, 10);
+    camera.position.set(-2, 1, 21);
     camera.lookAt(0, 0, 0);
   } else {
     path.getPoint(progress, camPos);
@@ -276,24 +229,29 @@ function frame() {
     camera.position.lerp(camPos, 0.12);
     camera.lookAt(lookAt);
 
-    core.rotation.y = t * 0.12;
-    core.rotation.x = Math.sin(t * 0.2) * 0.1;
-    core.scale.setScalar(1 + Math.sin(t * 1.6) * 0.03);
-    rings.forEach((r, i) => { r.rotation.z = t * (0.08 + i * 0.04); });
-    spine.rotation.y = t * 0.1;
-    orbs.forEach(({ mesh, halo }, i) => {
-      const bob = Math.sin(t * 1.2 + i) * 0.15;
-      mesh.position.y = mesh.userData.base.y + bob;
-      halo.position.y = mesh.position.y;
-      halo.lookAt(camera.position);
+    blobs.forEach((b) => {
+      const { base, phase, dirs, pos } = b.userData;
+      b.position.y = base.y + Math.sin(t * 1.1 + phase) * 0.3;
+      b.rotation.y = t * 0.2 + phase;
+      // Breathe: each vertex pushes in/out along its own direction, so the blob wobbles like soft clay
+      for (let i = 0; i < pos.count; i++) {
+        const x = dirs[i * 3], y = dirs[i * 3 + 1], z = dirs[i * 3 + 2];
+        const k = 1 + 0.08 * Math.sin(x * 3 + t * 1.6 + phase) * Math.cos(y * 3 - t * 1.2) * Math.sin(z * 2 + t);
+        pos.array[i * 3] = x * k;
+        pos.array[i * 3 + 1] = y * k;
+        pos.array[i * 3 + 2] = z * k;
+      }
+      pos.needsUpdate = true;
     });
-    orbGroup.rotation.y = t * 0.04;
+    bean.rotation.x = t * 0.15;
+    bean.rotation.y = t * 0.2;
+    bean.position.y = 2 + Math.sin(t * 0.8) * 0.4;
   }
 
-  // Hover detection on orbs
+  // Hover detection on blobs
   if (finePointer && !reduceMotion) {
     ray.setFromCamera(pointer, camera);
-    const hits = ray.intersectObjects(orbs.map((o) => o.mesh), false);
+    const hits = ray.intersectObjects(blobs, false);
     hovered = hits.length ? hits[0].object : null;
     document.body.style.cursor = hovered ? 'pointer' : '';
     if (hovered) {

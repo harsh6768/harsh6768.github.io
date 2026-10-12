@@ -1,0 +1,205 @@
+:root {
+  --paper: #f3ead6;
+  --paper-light: #fffdf5;
+  --ink: #1d1b2f;
+  --muted: #5a5670;
+  --red: #e8473f;
+  --mustard: #f2b533;
+  --teal: #3fb6a8;
+  --pink: #f7a8c4;
+  --blue: #3d5afe;
+  --shadow: 5px 6px 0 rgba(29, 27, 47, 0.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
+  font-size: 20px; line-height: 1.45; overflow-x: hidden;
+  /* Paper grain */
+  background-image:
+    radial-gradient(rgba(29,27,47,0.06) 1px, transparent 1.4px),
+    radial-gradient(rgba(29,27,47,0.04) 1px, transparent 1.4px);
+  background-size: 22px 22px, 37px 37px;
+  background-position: 0 0, 11px 17px;
+}
+a { color: inherit; text-decoration: none; }
+.mono { font-family: 'Special Elite', 'Courier New', monospace; }
+
+/* Typewriter label, like a stamp on a scrap */
+.kicker {
+  display: inline-block; align-self: flex-start; font-family: 'Special Elite', monospace; font-size: 0.85rem;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+  background: var(--mustard); padding: 0.2rem 0.6rem; transform: rotate(-2deg); margin-bottom: 0.9rem;
+  box-shadow: 2px 3px 0 rgba(29,27,47,0.2);
+}
+
+/* 3D scene sits on the paper, multiplied so colors print like ink */
+#scene { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; display: block; mix-blend-mode: multiply; opacity: 0.9; }
+.cursor-glow { position: fixed; left: -999px; top: -999px; width: 360px; height: 360px; border-radius: 50%; pointer-events: none; z-index: 1;
+  background: radial-gradient(circle, rgba(242,181,51,0.22), transparent 60%); transform: translate(-50%, -50%); }
+
+.orb-label {
+  position: fixed; left: 0; top: 0; z-index: 5; pointer-events: none; opacity: 0;
+  font-family: 'Special Elite', monospace; font-size: 0.9rem; padding: 0.3rem 0.7rem;
+  background: var(--mustard); color: var(--ink); border: 2px solid var(--ink);
+  transform: translate(-50%, -160%) rotate(-3deg); transition: opacity .2s; white-space: nowrap; box-shadow: 3px 3px 0 var(--ink);
+}
+.orb-label.on { opacity: 1; }
+
+/* HUD: a sticky note clipped to the side */
+.hud {
+  position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%) rotate(-2deg); z-index: 6;
+  display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-start;
+  font-family: 'Special Elite', monospace; font-size: 0.8rem;
+  padding: 1.1rem 1.2rem 1.2rem; background: var(--mustard); border: 2px solid var(--ink); box-shadow: var(--shadow);
+}
+.hud::before {
+  content: ''; position: absolute; top: -12px; left: 50%; width: 60px; height: 22px; transform: translateX(-50%) rotate(2deg);
+  background: rgba(255,255,255,0.55); border: 1px dashed rgba(29,27,47,0.25);
+}
+.hud-index { color: var(--red); font-weight: bold; }
+.hud-list { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+.hud-list a { color: var(--ink); display: block; transition: transform .2s; }
+.hud-list a.active { font-weight: bold; transform: translateX(4px); text-decoration: underline wavy var(--red); }
+.hud-bar { width: 6px; height: 100px; background: rgba(29,27,47,0.2); position: relative; overflow: hidden; border-radius: 3px; }
+.hud-bar span { position: absolute; left: 0; top: 0; width: 100%; height: 0%; background: var(--red); }
+
+main { position: relative; z-index: 2; pointer-events: none; }
+main a, main button, main .paper, main .card { pointer-events: auto; }
+main .paper.wide { pointer-events: none; } /* Builds sheet is only a container; its cards stay clickable */
+main .paper.wide .card { pointer-events: auto; }
+
+.chapter {
+  min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+  padding: 8vh 6vw 8vh 14vw; max-width: 1280px;
+}
+.chapter.panel-right { align-items: flex-end; margin-left: auto; padding-left: 6vw; padding-right: 10vw; }
+.chapter.panel-left { align-items: flex-start; }
+.chapter.contact { align-items: center; text-align: center; }
+
+/* Paper scrap: off-white sheet, hard shadow, a strip of tape */
+.paper {
+  position: relative; background: var(--paper-light); border: 2px solid var(--ink); border-radius: 4px;
+  padding: clamp(1.6rem, 3vw, 2.6rem); max-width: 640px; width: 100%; box-shadow: var(--shadow);
+  transform: rotate(-1deg);
+}
+.chapter.panel-right .paper { transform: rotate(1.2deg); }
+.paper.wide { max-width: 1100px; transform: rotate(0.4deg); }
+.paper::before {
+  content: ''; position: absolute; top: -14px; left: 50%; width: 120px; height: 28px; transform: translateX(-50%) rotate(-3deg);
+  background: rgba(247, 168, 196, 0.75); border-left: 1px dashed rgba(29,27,47,0.2); border-right: 1px dashed rgba(29,27,47,0.2);
+}
+.paper.featured {
+  background: var(--paper-light); transform: rotate(-0.8deg);
+  box-shadow: 9px 10px 0 var(--teal), var(--shadow);
+}
+.paper.featured::after {
+  content: 'Featured!'; position: absolute; right: -18px; top: -18px; background: var(--red); color: var(--paper-light);
+  font-family: 'Permanent Marker', cursive; font-size: 1.05rem; padding: 0.35rem 0.8rem; transform: rotate(8deg);
+  border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* Hero: loose letters on the paper, marker highlight behind the name */
+.hero { justify-content: center; }
+.hero h1 {
+  font-family: 'Permanent Marker', cursive; font-weight: 400;
+  font-size: clamp(3.2rem, 10vw, 8.5rem); line-height: 0.95; letter-spacing: -0.01em;
+  color: var(--ink); text-shadow: 4px 4px 0 var(--pink);
+}
+.hero h1 span.hl {
+  background: linear-gradient(transparent 58%, var(--mustard) 58%, var(--mustard) 92%, transparent 92%);
+  padding: 0 0.1em;
+}
+.section-title {
+  font-family: 'Permanent Marker', cursive; font-weight: 400; font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  line-height: 1.05; color: var(--ink); margin-bottom: 1.2rem; transform: rotate(-1.5deg);
+}
+.section-title.big { font-size: clamp(2.6rem, 7vw, 5.2rem); }
+.typed { font-family: 'Special Elite', monospace; font-size: clamp(1rem, 2vw, 1.25rem); color: var(--red); margin: 1.3rem 0 0.5rem; min-height: 1.6em; }
+.caret { animation: blink 1s steps(2) infinite; color: var(--ink); }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { color: var(--muted); font-size: clamp(1.15rem, 1.8vw, 1.35rem); max-width: 34rem; }
+.actions { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 1.8rem; }
+.chapter.contact .actions { justify-content: center; }
+
+/* Chunky sticker-buttons with offset shadow */
+.btn {
+  padding: 0.7rem 1.4rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper-light);
+  color: var(--ink); font-family: 'Permanent Marker', cursive; font-size: 1.05rem; box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--ink); }
+.btn.solid { background: var(--red); color: var(--paper-light); }
+.scroll { position: absolute; bottom: 3vh; right: 6vw; font-family: 'Special Elite', monospace; color: var(--muted); font-size: 0.9rem; }
+
+/* About */
+.skills-head { margin-top: 1.8rem; display: inline-block; transform: rotate(1deg); background: var(--teal); color: var(--ink); }
+
+/* Timeline: each role is a little note pinned to the sheet */
+.timeline { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 1.5rem; }
+.timeline > li {
+  position: relative; padding: 1rem 1.1rem; background: #fff; border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(29,27,47,0.2);
+}
+.timeline > li:nth-child(odd) { transform: rotate(-0.6deg); background: #fffbe9; }
+.timeline > li:nth-child(even) { transform: rotate(0.5deg); }
+.timeline > li::before {
+  content: '📌'; position: absolute; top: -12px; right: 12px; font-size: 1.3rem; transform: rotate(10deg);
+}
+.timeline h3 { font-family: 'Permanent Marker', cursive; font-weight: 400; font-size: 1.15rem; line-height: 1.3; }
+.timeline .meta { font-family: 'Special Elite', monospace; font-size: 0.8rem; color: var(--red); margin: 0.25rem 0 0.4rem; }
+.timeline p, .timeline > li > div { color: var(--muted); font-size: 1rem; }
+.timeline ul { padding-left: 1.2rem; color: var(--muted); font-size: 1rem; }
+.timeline ul li { margin-bottom: 0.2rem; }
+.timeline .skills-line { display: inline-block; background: var(--mustard); color: var(--ink); font-family: 'Special Elite', monospace; font-size: 0.78rem; padding: 0.1rem 0.5rem; margin-top: 0.4rem; }
+.edu-head { color: var(--ink); }
+
+/* Projects: polaroid-style cards, each tilted differently */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.6rem 1.2rem; margin-bottom: 2rem; padding-top: 0.8rem; }
+.card {
+  position: relative; padding: 1rem 1rem 0.9rem; background: #fff; border: 2px solid var(--ink); border-radius: 3px;
+  display: flex; flex-direction: column; gap: 0.45rem; box-shadow: var(--shadow);
+  transition: transform .25s, box-shadow .25s;
+}
+.card:nth-child(3n+1) { transform: rotate(-2deg); }
+.card:nth-child(3n+2) { transform: rotate(1.5deg); }
+.card:nth-child(3n+3) { transform: rotate(-0.8deg); }
+.card:hover { transform: rotate(0deg) translateY(-6px) scale(1.02); box-shadow: 8px 10px 0 var(--ink); z-index: 2; }
+.card::before {
+  content: ''; position: absolute; top: -10px; left: 50%; width: 70px; height: 20px; transform: translateX(-50%) rotate(4deg);
+  background: rgba(63, 182, 168, 0.7); border-left: 1px dashed rgba(29,27,47,0.2); border-right: 1px dashed rgba(29,27,47,0.2);
+}
+.card h3 { font-family: 'Permanent Marker', cursive; font-weight: 400; font-size: 1.15rem; line-height: 1.25; }
+.card p { color: var(--muted); font-size: 1rem; flex: 1; }
+.card .card-meta { display: flex; justify-content: space-between; align-items: center; font-family: 'Special Elite', monospace; font-size: 0.8rem; }
+.card .card-meta span:first-child { background: var(--pink); padding: 0 0.4rem; border: 1px solid var(--ink); }
+.card a.overlay { position: absolute; inset: 0; border-radius: 3px; }
+.card a.live { position: relative; z-index: 2; color: var(--blue); font-weight: bold; text-decoration: underline; }
+
+/* Skill chips as stickers, each slightly rotated */
+.chips { display: flex; flex-wrap: wrap; gap: 0.6rem 0.7rem; }
+.chip {
+  font-family: 'Special Elite', monospace; font-size: 0.85rem; padding: 0.25rem 0.7rem;
+  background: var(--paper-light); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 2px 3px 0 var(--ink);
+  transition: transform .2s;
+}
+.chip:nth-child(4n+1) { background: var(--mustard); transform: rotate(-2deg); }
+.chip:nth-child(4n+2) { background: var(--pink); transform: rotate(1.5deg); }
+.chip:nth-child(4n+3) { background: var(--teal); transform: rotate(-1deg); }
+.chip:hover { transform: rotate(0) scale(1.08); }
+
+/* Contact */
+.contact h2 { font-size: clamp(2.6rem, 7vw, 5.2rem); }
+.foot { position: absolute; bottom: 3vh; left: 0; right: 0; text-align: center; font-family: 'Special Elite', monospace; color: var(--muted); font-size: 0.85rem; }
+.contact { position: relative; }
+
+@media (max-width: 860px) {
+  .hud { display: none; }
+  .chapter, .chapter.panel-right { padding: 10vh 5vw; align-items: stretch; margin: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
