@@ -93,96 +93,43 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xf3ead6, 0.03);
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 
-const HOT = new THREE.Color(0xe8473f);   // red
-const CYAN = new THREE.Color(0x3fb6a8);  // teal
-const LIME = new THREE.Color(0xf2b533);  // mustard
+const INK = 0x1d1b2f;
+const PALETTE = [0xe8473f, 0x3fb6a8, 0xf2b533, 0xf7a8c4, 0x3d5afe];
 
-// Core: Fibonacci sphere of points + wireframe shell
-const core = new THREE.Group();
-const CORE_N = 900;
-const corePos = new Float32Array(CORE_N * 3);
-for (let i = 0; i < CORE_N; i++) {
-  const y = 1 - (i / (CORE_N - 1)) * 2;
-  const rad = Math.sqrt(1 - y * y);
-  const th = i * Math.PI * (3 - Math.sqrt(5));
-  corePos.set([Math.cos(th) * rad * 2.2, y * 2.2, Math.sin(th) * rad * 2.2], i * 3);
-}
-const coreGeo = new THREE.BufferGeometry();
-coreGeo.setAttribute('position', new THREE.BufferAttribute(corePos, 3));
-core.add(new THREE.Points(coreGeo, new THREE.PointsMaterial({ color: CYAN, size: 0.05, transparent: true, opacity: 0.9 })));
-core.add(new THREE.Mesh(
-  new THREE.IcosahedronGeometry(1.5, 2),
-  new THREE.MeshBasicMaterial({ color: HOT, wireframe: true, transparent: true, opacity: 0.25 })
-));
-scene.add(core);
-
-// Orbit rings around the core
-const rings = [];
-[2.9, 3.6, 4.4].forEach((radius, i) => {
-  const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(radius, 0.008, 6, 200),
-    new THREE.MeshBasicMaterial({ color: i === 1 ? LIME : CYAN, transparent: true, opacity: 0.45 })
-  );
-  ring.rotation.set(Math.PI / 2.3 + i * 0.35, i * 0.6, 0);
-  scene.add(ring);
-  rings.push(ring);
-});
-
-// Project orbs on a wide ring; hover shows label, click opens repo
-const orbs = [];
-const orbGroup = new THREE.Group();
-scene.add(orbGroup);
+// Project cubes: a loose ring of tumbling blocks, one per project. Hover shows label, click opens repo.
+const cubes = [];
+const cubeGroup = new THREE.Group();
+scene.add(cubeGroup);
 projects.forEach((p, i) => {
   const a = (i / projects.length) * Math.PI * 2;
-  const pos = new THREE.Vector3(Math.cos(a) * 8, Math.sin(a * 2) * 1.2, Math.sin(a) * 8);
-  const orb = new THREE.Mesh(
-    new THREE.SphereGeometry(0.45, 32, 32),
-    new THREE.MeshBasicMaterial({ color: i % 2 ? HOT : CYAN, transparent: true, opacity: 0.9 })
+  const base = new THREE.Vector3(Math.cos(a) * 5.5, 0.4 * Math.sin(a * 2), Math.sin(a) * 5.5);
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(0.8, 0.8, 0.8),
+    new THREE.MeshBasicMaterial({ color: PALETTE[i % PALETTE.length], transparent: true, opacity: 0.9 })
   );
-  orb.position.copy(pos);
-  orb.userData = { name: p.name, url: p.url, base: pos.clone() };
-  const halo = new THREE.Mesh(
-    new THREE.RingGeometry(0.6, 0.66, 48),
-    new THREE.MeshBasicMaterial({ color: CYAN, side: THREE.DoubleSide, transparent: true, opacity: 0.5 })
-  );
-  halo.position.copy(pos);
-  orbGroup.add(orb, halo);
-  orbs.push({ mesh: orb, halo });
+  mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), new THREE.LineBasicMaterial({ color: INK })));
+  mesh.position.copy(base);
+  mesh.userData = { name: p.name, url: p.url, base: base.clone(), phase: i };
+  cubeGroup.add(mesh);
+  cubes.push(mesh);
 });
 
-// Experience spine: a helix of nodes on the right
-const spine = new THREE.Group();
-experience.forEach((_, i) => {
-  const t = i / Math.max(experience.length - 1, 1);
-  const node = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.22),
-    new THREE.MeshBasicMaterial({ color: LIME, wireframe: true })
-  );
-  node.position.set(Math.cos(t * 6) * 1.3 + 9, 4 - t * 8, Math.sin(t * 6) * 1.3 - 6);
-  spine.add(node);
-});
-scene.add(spine);
-
-// Starfield + floor grid for depth
-const starCount = 1600;
-const starPos = new Float32Array(starCount * 3);
-for (let i = 0; i < starCount; i++) {
-  starPos.set([(Math.random() - 0.5) * 120, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 120], i * 3);
-}
-const starGeo = new THREE.BufferGeometry();
-starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x1d1b2f, size: 0.05, transparent: true, opacity: 0.35 })));
-
-const grid = new THREE.GridHelper(120, 60, 0x1d1b2f, 0x1d1b2f);
-grid.position.y = -5;
-grid.material.transparent = true;
-grid.material.opacity = 0.12;
-scene.add(grid);
+// Rippling dot-wave floor, drawn in ink
+const waveGeo = new THREE.PlaneGeometry(44, 26, 110, 60);
+waveGeo.rotateX(-Math.PI / 2);
+const wavePos = waveGeo.attributes.position;
+const waveBase = Float32Array.from(wavePos.array);
+const wave = new THREE.Points(
+  waveGeo,
+  new THREE.PointsMaterial({ color: INK, size: 0.07, transparent: true, opacity: 0.45 })
+);
+wave.position.y = -4;
+scene.add(wave);
 
 /* ---------- Camera path driven by scroll ---------- */
 // One keypoint per chapter: camera position + look-at target
 const path = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-3.2, 0.6, 10), // 00 hero (core sits right of the text)
+  new THREE.Vector3(-2, 1, 17),     // 00 hero (cubes sit behind the text)
   new THREE.Vector3(-5, 1.2, 6),    // 01 about
   new THREE.Vector3(3, -0.6, 16),   // 02 career (highlighted, outside the orb ring)
   new THREE.Vector3(0, 3.2, 12),    // 03 builds
@@ -223,7 +170,7 @@ function updateHud(idx, t) {
   hudBar.style.height = `${Math.min(Math.max(t, 0), 1) * 100}%`;
 }
 
-/* ---------- Orb hover + click ---------- */
+/* ---------- Cube hover + click ---------- */
 const label = document.getElementById('orb-label');
 const ray = new THREE.Raycaster();
 const pointer = new THREE.Vector2(9, 9);
@@ -235,11 +182,11 @@ if (finePointer) {
     label.style.top = e.clientY + 'px';
   });
 }
-// Clicks on empty space reach the scene; check which orb (if any) is under the cursor
+// Clicks on empty space reach the scene; check which cube (if any) is under the cursor
 window.addEventListener('click', (e) => {
   if (e.target.closest('a, button, .glass, .card')) return;
   ray.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
-  const hit = ray.intersectObjects(orbs.map((o) => o.mesh), false)[0];
+  const hit = ray.intersectObjects(cubes, false)[0];
   if (hit) window.open(hit.object.userData.url, '_blank', 'noopener');
 });
 
@@ -268,7 +215,7 @@ function frame() {
   updateHud(idx, progress);
 
   if (reduceMotion) {
-    camera.position.set(-3.2, 0.6, 10);
+    camera.position.set(-2, 1, 17);
     camera.lookAt(0, 0, 0);
   } else {
     path.getPoint(progress, camPos);
@@ -276,24 +223,26 @@ function frame() {
     camera.position.lerp(camPos, 0.12);
     camera.lookAt(lookAt);
 
-    core.rotation.y = t * 0.12;
-    core.rotation.x = Math.sin(t * 0.2) * 0.1;
-    core.scale.setScalar(1 + Math.sin(t * 1.6) * 0.03);
-    rings.forEach((r, i) => { r.rotation.z = t * (0.08 + i * 0.04); });
-    spine.rotation.y = t * 0.1;
-    orbs.forEach(({ mesh, halo }, i) => {
-      const bob = Math.sin(t * 1.2 + i) * 0.15;
-      mesh.position.y = mesh.userData.base.y + bob;
-      halo.position.y = mesh.position.y;
-      halo.lookAt(camera.position);
+    cubes.forEach((c) => {
+      const { base, phase } = c.userData;
+      c.position.y = base.y + Math.sin(t * 1.2 + phase) * 0.25;
+      c.rotation.x = t * 0.35 + phase;
+      c.rotation.y = t * 0.45 + phase * 0.7;
     });
-    orbGroup.rotation.y = t * 0.04;
+    cubeGroup.rotation.y = t * 0.05;
+
+    for (let i = 0; i < wavePos.count; i++) {
+      const x = waveBase[i * 3];
+      const z = waveBase[i * 3 + 2];
+      wavePos.array[i * 3 + 1] = Math.sin(x * 0.35 + t * 0.9) * 0.6 + Math.cos(z * 0.45 - t * 0.7) * 0.4;
+    }
+    wavePos.needsUpdate = true;
   }
 
-  // Hover detection on orbs
+  // Hover detection on cubes
   if (finePointer && !reduceMotion) {
     ray.setFromCamera(pointer, camera);
-    const hits = ray.intersectObjects(orbs.map((o) => o.mesh), false);
+    const hits = ray.intersectObjects(cubes, false);
     hovered = hits.length ? hits[0].object : null;
     document.body.style.cursor = hovered ? 'pointer' : '';
     if (hovered) {
