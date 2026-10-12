@@ -77,7 +77,11 @@ body::after {
 .hud-bar { width: 3px; height: 110px; border-radius: 3px; background: rgba(255,255,255,0.15); position: relative; overflow: hidden; }
 .hud-bar span { position: absolute; left: 0; top: 0; width: 100%; height: 0%; background: linear-gradient(var(--accent), var(--accent-2)); }
 
-main { position: relative; z-index: 2; }
+/* Let clicks fall through the layout to the 3D scene; keep interactive parts clickable */
+main { position: relative; z-index: 2; pointer-events: none; }
+main a, main button, main .glass, main .card { pointer-events: auto; }
+main .glass.wide { pointer-events: none; } /* Builds panel is only a container; its cards stay clickable */
+main .glass.wide .card, main .glass.wide .cards a { pointer-events: auto; }
 
 .chapter {
   min-height: 100vh; display: flex; flex-direction: column; justify-content: center;

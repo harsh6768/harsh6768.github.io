@@ -235,8 +235,12 @@ if (finePointer) {
     label.style.top = e.clientY + 'px';
   });
 }
-canvas.addEventListener('click', () => {
-  if (hovered) window.open(hovered.userData.url, '_blank', 'noopener');
+// Clicks on empty space reach the scene; check which orb (if any) is under the cursor
+window.addEventListener('click', (e) => {
+  if (e.target.closest('a, button, .glass, .card')) return;
+  ray.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
+  const hit = ray.intersectObjects(orbs.map((o) => o.mesh), false)[0];
+  if (hit) window.open(hit.object.userData.url, '_blank', 'noopener');
 });
 
 /* ---------- Resize + loop ---------- */
