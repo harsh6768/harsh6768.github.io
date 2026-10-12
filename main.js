@@ -182,17 +182,19 @@ scene.add(grid);
 /* ---------- Camera path driven by scroll ---------- */
 // One keypoint per chapter: camera position + look-at target
 const path = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-3.2, 0.6, 10),  // 00 hero (core sits right of the text)
+  new THREE.Vector3(-3.2, 0.6, 10), // 00 hero (core sits right of the text)
   new THREE.Vector3(-5, 1.2, 6),    // 01 about
-  new THREE.Vector3(3, -0.6, 7),    // 02 career
+  new THREE.Vector3(3, -0.6, 16),   // 02 career (highlighted, outside the orb ring)
   new THREE.Vector3(0, 3.2, 12),    // 03 builds
-  new THREE.Vector3(0, 0, 5),       // 04 contact
+  new THREE.Vector3(-3, 0, 7),      // 04 education
+  new THREE.Vector3(0, 0, 5),       // 05 contact
 ]);
 const lookPath = new THREE.CatmullRomCurve3([
   new THREE.Vector3(0, 0, 0),
   new THREE.Vector3(-2, 0, 0),
-  new THREE.Vector3(5, 0, -4),
+  new THREE.Vector3(0, 0, -6),
   new THREE.Vector3(0, 0, 0),
+  new THREE.Vector3(-2, 0, -2),
   new THREE.Vector3(0, 0, -2),
 ]);
 
