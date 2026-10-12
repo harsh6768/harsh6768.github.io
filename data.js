@@ -59,10 +59,8 @@ export const projects = [
   { name: 'E-commerce', lang: 'Flutter', stars: 33, desc: 'Flutter e-commerce app with carousels and reusable components.', url: 'https://github.com/harsh6768/E-commerce' },
   { name: 'awesome-stripe', lang: 'JavaScript', stars: 7, desc: 'Cab-ride payments flow: moving funds to merchant accounts with Stripe.', url: 'https://github.com/harsh6768/awesome-stripe' },
   { name: 'web3-basics', lang: 'JavaScript', stars: 5, desc: 'Web3.js primer for connecting to the Ethereum blockchain.', url: 'https://github.com/harsh6768/web3-basics' },
-  { name: 'Cab-Booking-Apis', lang: 'JavaScript', stars: 1, desc: 'Ride-booking APIs with hapi.js, MongoDB and MySQL using MVC.', url: 'https://github.com/harsh6768/Cab-Booking-Apis' },
   { name: 'ecr-deploy', lang: 'JavaScript', stars: 0, desc: 'Node service on RDS deployed as a Docker image to EC2 with CI/CD and ECR.', url: 'https://github.com/harsh6768/ecr-deploy' },
   { name: 'DevTools', lang: 'React / Vite', live: 'https://yourtoolkit.in', desc: '63 fast, browser-local utilities for JSON, encoding, HTTP, SEO, images and PDFs. No sign-up, and nothing leaves your machine.', url: 'https://github.com/harsh6768/your-dev-tool' },
-  { name: 'kafka-fire', lang: 'JavaScript', stars: 0, desc: 'Kafka setup, configuration, integration and scaling notes.', url: 'https://github.com/harsh6768/kafka-fire' },
 ];
 
 export const skills = [
