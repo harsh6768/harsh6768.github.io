@@ -137,3 +137,6 @@ footer { text-align: center; padding: 3rem; color: var(--muted); font-size: 0.85
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+.card .foot a.live { position: relative; z-index: 2; color: var(--accent); }
+.card .foot a.live:hover { text-decoration: underline; }

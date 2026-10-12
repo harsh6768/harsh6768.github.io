@@ -23,6 +23,7 @@ export const projects = [
   { name: 'web3-basics', lang: 'JavaScript', stars: 5, desc: 'Web3.js primer for connecting to the Ethereum blockchain.', url: 'https://github.com/harsh6768/web3-basics' },
   { name: 'Cab-Booking-Apis', lang: 'JavaScript', stars: 1, desc: 'Ride-booking APIs with hapi.js, MongoDB and MySQL using MVC.', url: 'https://github.com/harsh6768/Cab-Booking-Apis' },
   { name: 'ecr-deploy', lang: 'JavaScript', stars: 0, desc: 'Node service on RDS deployed as a Docker image to EC2 with CI/CD and ECR.', url: 'https://github.com/harsh6768/ecr-deploy' },
+  { name: 'DevTools', lang: 'React / Vite', live: 'https://yourtoolkit.in', desc: 'Developer tools and cheatsheets for formatting, validation, encoding and debugging. Live at yourtoolkit.in.', url: 'https://github.com/harsh6768/your-dev-tool' },
   { name: 'kafka-fire', lang: 'JavaScript', stars: 0, desc: 'Kafka setup, configuration, integration and scaling notes.', url: 'https://github.com/harsh6768/kafka-fire' },
 ];
 

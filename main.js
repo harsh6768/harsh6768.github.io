@@ -20,7 +20,7 @@ document.getElementById('cards').innerHTML = projects.map((p) => `
     <a class="overlay" href="${p.url}" target="_blank" rel="noopener" aria-label="${p.name} on GitHub"></a>
     <h3>${p.name}</h3>
     <p>${p.desc}</p>
-    <div class="foot"><span>${p.lang}</span><span>★ ${p.stars}</span></div>
+    <div class="foot"><span>${p.lang}</span>${p.live ? `<a class="live" href="${p.live}" target="_blank" rel="noopener">Live ↗</a>` : `<span>★ ${p.stars}</span>`}</div>
   </article>`).join('');
 
 document.getElementById('chips').innerHTML = skills.map((s) => `<span class="chip">${s}</span>`).join('');
