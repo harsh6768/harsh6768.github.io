@@ -51,8 +51,8 @@ export const experience = [
 export const education = [
   { school: 'Lovely Professional University', degree: 'Bachelor of Technology, Computer Engineering', period: '2016 – 2020', detail: '' },
   { school: 'Allen Career Institute', degree: 'IIT Coaching · Kota, Rajasthan', period: '2015 – 2016', detail: '' },
-  { school: 'Govt. Excellence Higher Secondary School', degree: '12th, Mathematics · Satna, Madhya Pradesh', period: '2014 – 2015', detail: 'Grade: 90.4% · District Chess Player' },
-  { school: 'Govt. Excellence Higher Secondary School', degree: '10th, High school · Satna, Madhya Pradesh', period: '2012 – 2013', detail: 'Grade: 89.8%' },
+  { school: 'Govt. Excellence Higher Secondary School', degree: '12th, Mathematics · Satna, Madhya Pradesh', period: '2014 – 2015', detail: 'District Chess Player' },
+  { school: 'Govt. Excellence Higher Secondary School', degree: '10th, High school · Satna, Madhya Pradesh', period: '2012 – 2013', detail: '' },
 ];
 
 export const projects = [

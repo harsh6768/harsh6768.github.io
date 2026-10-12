@@ -90,12 +90,12 @@ const canvas = document.getElementById('scene');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x04050b, 0.045);
+scene.fog = new THREE.FogExp2(0x0b0a1f, 0.045);
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 
-const HOT = new THREE.Color(0xff3d7f);
-const CYAN = new THREE.Color(0x29f0ff);
-const LIME = new THREE.Color(0xb6ff3b);
+const HOT = new THREE.Color(0xa78bfa);   // violet
+const CYAN = new THREE.Color(0x5eead4);  // teal
+const LIME = new THREE.Color(0xfda4af);  // rose
 
 // Core: Fibonacci sphere of points + wireframe shell
 const core = new THREE.Group();
@@ -173,7 +173,7 @@ const starGeo = new THREE.BufferGeometry();
 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
 scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, transparent: true, opacity: 0.6 })));
 
-const grid = new THREE.GridHelper(120, 60, 0x29f0ff, 0x1a2350);
+const grid = new THREE.GridHelper(120, 60, 0x5eead4, 0x1e1b4b);
 grid.position.y = -5;
 grid.material.transparent = true;
 grid.material.opacity = 0.35;
